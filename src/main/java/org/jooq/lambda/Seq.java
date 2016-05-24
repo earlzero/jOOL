@@ -4596,8 +4596,9 @@ public interface Seq<T> extends Stream<T>, Iterable<T>, Collectable<T> {
     /**
      * Wrap multiple <code>Optional</code>'s into a <code>Seq</code>.
      */
-    static <T> Seq<T> seq(Optional<? extends T>... optionals) {
-        return seq(Arrays.stream(optionals).flatMap(o -> o.isPresent() ? Stream.of(o.get()) : Stream.empty()));
+    @SafeVarargs
+    static <T> Seq<T> seq(final Optional<? extends T>... optionals) {
+        return seq(Arrays.stream(optionals).filter(o -> o.isPresent()).map(o -> o.get()));
     }
 
     /**
